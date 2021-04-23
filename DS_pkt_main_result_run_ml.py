@@ -17,11 +17,14 @@ def run_xgboost(df_train, df_test, platform,iter):
     x_test = df_test[predictors]
     y_test = df_test[target]
 
+    # to assess only the first 20 features uncomment the line
     # x_train = select_top_20_features(df=x_train,
     #                                  platform=platform)
     # x_test = select_top_20_features(df=x_test,
     #                                 platform=platform)
 
+    # initialize the XGBoost classifier.
+    # classifier parameters were selected running RandomizedSearchCV operation in sklearn with CV=10
     xgboost_model = XGBClassifier(n_estimators=1000,
                                   max_depth=7,
                                   min_child_weight=1,
@@ -38,20 +41,19 @@ def run_xgboost(df_train, df_test, platform,iter):
     xgboost_model.fit(x_train, y_train)
     y_pred = xgboost_model.predict(x_test)
 
-
     # store the predictions for each trace with their corresponding traces
     accuracy = accuracy_score(y_test, y_pred)
     precsion = average_precision_score(y_test, y_pred)
     recall = recall_score(y_test, y_pred, average='binary')
 
+    # get the ROC data. ROC data not appeared in the research paper
     # predict probabilities
     model_probs = xgboost_model.predict_proba(x_test)
     # keep probabilities for the positive outcome only
     model_probs = model_probs[:, 1]
     # calculate scores
     model_auc = roc_auc_score(y_test, model_probs)
-    # summarize scores
-    # print('Logistic: ROC AUC=%.3f' % (model_auc))
+
     # calculate roc curves
     model_fpr, model_tpr, _ = roc_curve(y_test, model_probs)
 
@@ -65,6 +67,7 @@ def run_xgboost(df_train, df_test, platform,iter):
 
 
 # split the dataset
+# non of the traces of the same video ID do not appear in both train and test datasets
 def split_train_test(df, random_seed):
     np.random.seed(random_seed)
     all_videos = np.arange(0, 51, 1)
@@ -99,7 +102,10 @@ def split_train_test(df, random_seed):
 
 
 # selec the top 20 features defined by the xgboost model
+# selecting the top 20 features may slightly reduce the performance
 def select_top_20_features(df, platform):
+
+    # select the features according to the platform
     if platform == settings.PLATFORM_YT:
         features = YT_W_5s_1s
     elif platform == settings.PLATFORM_FB:

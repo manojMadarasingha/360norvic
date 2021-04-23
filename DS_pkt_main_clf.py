@@ -21,13 +21,15 @@ def main_controller(platform, duration, path):
     else:
         platform_folder = 'both'
 
-    output_path = path + '/' + 'clf_results' + '/' + platform_folder
+    output_path = path + '/' + 'clf_results_DS_pkt_main' + '/' + platform_folder
     if not os.path.exists(output_path):
         os.makedirs(output_path)
 
+    # read data to assess individul platforms
     if platform != settings.PLATFORM_BOTH:
         path_in = path + '/' + 'processed_data_DS_pkt' + '/' + platform_folder
         final_df = pd.read_csv(path_in + '/' + 's_1_w_5_t_' + str(duration) + '.csv', )
+    # read both platforms to assess the 'BOTH' traffic types
     else:
         path_in = path + '/' + 'processed_data_DS_pkt' + '/' + 'yt'
         final_df_yt = pd.read_csv(path_in + '/' + 's_1_w_5_t_' + str(duration) + '.csv')
@@ -45,8 +47,10 @@ def main_controller(platform, duration, path):
     prec_list = []
     recal_list = []
 
+    # run the classification
     for i in range(num_of_iterations):
 
+        # in every iteration change the train and test data
         train_df, test_df = run_ml.split_train_test(final_df, random_seed=i)
 
         # remove ground truth variables
@@ -66,8 +70,9 @@ def main_controller(platform, duration, path):
 
         counts = np.asarray(test_df['Vid_type'].value_counts())
 
+        # run the classification
         if len(counts) > 1:
-            acc, prec, recall, roc = run_ml.run_xgboost(train_df, test_df, platform,i)
+            acc, prec, recall, roc = run_ml.run_xgboost(train_df, test_df, platform, i)
             roc_list.append(roc)
             acc_list.append(acc)
             prec_list.append(prec)
@@ -77,10 +82,10 @@ def main_controller(platform, duration, path):
                                       'Pred': np.asarray(prec_list),
                                       'Reca': np.asarray(recal_list)})
 
-    print('average === Acc: %.2f  Prec: %.2f  Reca: %.2f ==='  % (np.mean(np.asarray(acc_list)),
-                                                                  np.mean(np.asarray(prec_list)),
-                                                                  np.mean(np.asarray(prec_list))))
-    # add different feature count for the data.
+    print('average === Acc: %.2f  Prec: %.2f  Reca: %.2f ===' % (np.mean(np.asarray(acc_list)),
+                                                                 np.mean(np.asarray(prec_list)),
+                                                                 np.mean(np.asarray(prec_list))))
+    # store the data.
     final_performance.to_csv(output_path + '/' + 's_1_w_5_t_' + str(duration) + '.csv')
 
     return
@@ -117,7 +122,7 @@ def main():
     parser.add_argument('--t_type',
                         type=str,
                         default='YT',
-                        help='Select one of the traffic type: YT, FB or BOTH ')
+                        help='Select one of the traffic type as a String variable: ' + '"' + 'YT' + '",' + '"' + 'FB' + '",' + 'or ' + '"' + 'BOTH' + '"')
     parser.add_argument('--duration',
                         type=int,
                         default=60,
