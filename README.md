@@ -89,7 +89,9 @@ sample implementation
 
 ` python3 DS_pkt_near_realtime.py --t_type 'FB' --run_mode_operation --already_processed  --path <folder path> `
 
-Please cite our work if you intend to use our dataset or refer to the paper.
+`--help` for further support
+
+### Please cite our work if you intend to use our dataset or refer to the paper.
 
 *Chamara Kattadige, Aravindh Raman, Kanchana Thilakarathna, Andra Lutu, and Diego Perino. 2021.  360NorVic: 360-Degree Video Classification from Mobile Encrypted Video Traffic (in press). In Workshop on Network and Operating System Support for Digital Audio and Video (NOSSDAV ’21).*
 
