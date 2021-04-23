@@ -22,9 +22,11 @@ Offline evaluation for three traffic types namely YouTube (YT), Facebook (FB) an
 * clf_results_DS_pkt_main: output of the classification by XGBoost model for different durations and number of different train/test splits of the data.
 
 ### Implementation
-Run `DS_pkt_main_clf.py`
-
-
-
-
-
+Run `DS_pkt_main_clf.py` giving the followgin arguments appropriately
+* `--t_type`              traffic type
+* `--duration`            duration of the trace  (default = 60s)
+* `--num_of_iterations`   num of different train/test splits (default = 20)
+* `--path`                current working driectory
+sample implementation
+` python3 DS_flw_main_clf.py --t_type 'FB' --num_of_flows 6 --num_of_trials 5 --path <desired path> `
+`--help` for further support
