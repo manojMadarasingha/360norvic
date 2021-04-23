@@ -30,7 +30,7 @@ Run `DS_pkt_main_clf.py` giving the followgin arguments appropriately
 
 sample implementation
 
-` python3 DS_pkt_main_clf.py --t_type 'YT'  --num_of_iterations 5 --duration 20 --path <desired path> `
+` python3 DS_pkt_main_clf.py --t_type 'YT'  --num_of_iterations 5 --duration 20 --path <folder path> `
 
 `--help` for further support
 
@@ -50,13 +50,57 @@ Run `DS_flw_main_clf.py` giving the followgin arguments appropriately
 
 sample implementation
 
-` python3 DS_flw_main_clf.py --t_type 'FB' --num_of_flows 6 --num_of_trials 5 --path <desired path> `
+` python3 DS_flw_main_clf.py --t_type 'FB' --num_of_flows 6 --num_of_trials 5 --path <folder path> `
 
 `--help` for further support
 
 ## Near-realtime classificaiton (Section 4.3, Section 5.2 in the paper)
-Near-realtime classification for three traffic types YT, FB or BOTH, using **packet** level data. Unlike offline evalutation, prediction (360 or Normal video) is  given for every bin of the trace. 
+Near-realtime classification for three traffic types YT, FB or BOTH, using **packet** level data. Unlike offline evalutation, first, prediction (360 or Normal video) is  given for every bin of the trace using a XGBoost model. Secondly, majority voting is applied on groups of XGBoost output to get the final decision every 5s with an increasing accuracy. Note that entire near-realtime model can be considered as (XGBoost+MODE).
 
+### Datasets
+* processed_data_DS_pkt_near_realtime: binned trace data (bin size = 5s, stride/step size = 1s)
+* clf_result_DS_pkt_near_realtime
+    * XGBoost_prediction_processed: sample XGBoost ouput
+    * MODE_prediction_processed: sample MODE (majority voting) output
+    * XGBoost_prediction: XGBoost output after running the related code
+    * MODE_prediction: final output after the MODE operation running the related code segment
+
+### implementation
+Run `DS_pkt_near_realtime.py` giving the following arguments appropriately. Final output will be given for the entire video duration. 
+* `--t_type`                  traffic type
+* `--num_of_rounds_xgboost`   num of XGBoost iterations with different train/test splits. Increasing this parameter will generalize the results. 
+* `--run_xgboost`             enable running the xgboost
+* `--run_mode_operation`      enable running the majority voting operation
+* `--already_processed`       run the code with sample output data. Since, XGBoost prediction may take longer time, users can directly run majority voting by enabling this arguement along with `--run_mode_operation`.
+* `--path`                  current working driectory
+
+Note: Before running the mode operation, it is essential to run the XGBoost classification for each bin for the considered traffic type. For 'BOTH' traffic type, both YT and FB XGBoost prediction should be taken. You can only run XGBoost operation for either FB or YT, but not for BOTH.
+
+sample implementation
+* run the XGBoost operation for FB 
+
+` python3 DS_pkt_near_realtime.py --t_type 'FB' --num_of_rounds_xgboost 10 --run_xgboost --path <folder path> `
+
+* run the XGBoost and MODE operation for FB 
+
+` python3 DS_pkt_near_realtime.py --t_type 'FB' --num_of_rounds_xgboost 10 --run_xgboost --run_mode_operation  --path <folder path> `
+
+* run the MODE operation using sample XGBoost prediction
+
+` python3 DS_pkt_near_realtime.py --t_type 'FB' --run_mode_operation --already_processed  --path <folder path> `
+
+Please cite the our work if you intend to use our dataset.
+
+*Chamara Kattadige, Aravindh Raman, Kanchana Thilakarathna, Andra Lutu, and Diego Perino. 2021.  360NorVic: 360-Degree Video Classification from Mobile Encrypted Video Traffic (in press). In Workshop on Network and Operating System Support for Digital Audio and Video (NOSSDAV ’21).*
+
+Latex bib.
+
+`@inproceedings{360Norivc,
+  title={360NorVic: 360-Degree Video Classification from Mobile Encrypted Video Traffic (in press)},
+  author={Kattadige, Chamara and Raman, Aravindh  and Thilakarathna, Kanchana  and Lutu, Andra  and Perino, Diego },
+  booktitle={Workshop on Network and Operating System Support for Digital Audio and Video (NOSSDAV ’21)},
+  year={2021}
+}`
 
 
 
