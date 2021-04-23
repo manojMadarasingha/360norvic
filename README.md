@@ -1,10 +1,10 @@
 # 360norvic
-This repository holds the artifacts to reproduce the main results in the paper, "360Norvic: 360-Degree Video Classification from Mobile Encrypted Video Traffic" to classify 360-degree videos from mobile encrytped video traffic. There three main evaluations
+This repository holds the artifacts to reproduce the main results in the paper, "360Norvic: 360-Degree Video Classification from Mobile Encrypted Video Traffic" to classify 360-degree videos from mobile encrytped video traffic. There are three main evaluations.
 * Offline classification - DS-pkt
 * Offline classification - DS-flw
 * Near-realtime classification - DS-pkt
 
-(Despite the slight changes of performance of the classification results, the trends of the result variation are observable).
+(Despite the slight changes of performance of the classification results, the trends of the result variations are still there).
 
 ## Requirements
 Following packages are required.
@@ -22,11 +22,11 @@ Offline evaluation for three traffic types namely YouTube (YT), Facebook (FB) an
 * clf_results_DS_pkt_main: output of the classification by XGBoost model for different durations and number of different train/test splits of the data.
 
 ### Implementation
-Run `DS_pkt_main_clf.py` giving the followgin arguments appropriately
+Run `DS_pkt_main_clf.py` giving the following arguments appropriately
 * `--t_type`              traffic type
 * `--duration`            duration of the trace  (default = 60s)
 * `--num_of_iterations`   num of different train/test splits (default = 20)
-* `--path`                current working driectory
+* `--path`                folder path (by default is set to the folder path)
 
 sample implementation
 
@@ -46,7 +46,7 @@ Run `DS_flw_main_clf.py` giving the followgin arguments appropriately
 * `--t_type`              traffic type
 * `--num_of_flows`        number of flows for each trace. select one value from {1,2,4,6,8,10,100 (represents 'all' scenario)}
 * `--num_of_trials`       num of different train/test splits (default = 20)
-* `--path`                current working driectory
+* `--path`                folder path (by default is set to the folder path)
 
 sample implementation
 
@@ -59,11 +59,11 @@ Near-realtime classification for three traffic types YT, FB or BOTH, using **pac
 
 ### Datasets
 * processed_data_DS_pkt_near_realtime: binned trace data (bin size = 5s, stride/step size = 1s)
-* clf_result_DS_pkt_near_realtime
-    * XGBoost_prediction_processed: sample XGBoost ouput
-    * MODE_prediction_processed: sample MODE (majority voting) output
-    * XGBoost_prediction: XGBoost output after running the related code
-    * MODE_prediction: final output after the MODE operation running the related code segment
+* clf_result_DS_pkt_near_realtime; output of the classification by XGBoost and MODE operations.
+    * XGBoost_prediction_processed: sample XGBoost ouput.
+    * MODE_prediction_processed: sample MODE (majority voting) output.
+    * XGBoost_prediction: XGBoost output after XGBoost operation.
+    * MODE_prediction: final output after the MODE operation.
 
 ### implementation
 Run `DS_pkt_near_realtime.py` giving the following arguments appropriately. Final output will be given for the entire video duration. 
@@ -72,7 +72,7 @@ Run `DS_pkt_near_realtime.py` giving the following arguments appropriately. Fina
 * `--run_xgboost`             enable running the xgboost
 * `--run_mode_operation`      enable running the majority voting operation
 * `--already_processed`       run the code with sample output data. Since, XGBoost prediction may take longer time, users can directly run majority voting by enabling this arguement along with `--run_mode_operation`.
-* `--path`                  current working driectory
+* `--path`                    folder path (by default is set to the folder path)
 
 Note: Before running the mode operation, it is essential to run the XGBoost classification for each bin for the considered traffic type. For 'BOTH' traffic type, both YT and FB XGBoost prediction should be taken. You can only run XGBoost operation for either FB or YT, but not for BOTH.
 
