@@ -27,6 +27,8 @@ Run `DS_pkt_main_clf.py` giving the followgin arguments appropriately
 * `--duration`            duration of the trace  (default = 60s)
 * `--num_of_iterations`   num of different train/test splits (default = 20)
 * `--path`                current working driectory
+
 sample implementation
 ` python3 DS_flw_main_clf.py --t_type 'FB' --num_of_flows 6 --num_of_trials 5 --path <desired path> `
+
 `--help` for further support
