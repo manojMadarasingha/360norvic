@@ -4,10 +4,8 @@ import settings
 
 import pandas as pd
 import numpy as np
-import assign_control_conditions
 
-
-from sklearn.metrics import roc_curve, roc_auc_score,average_precision_score, recall_score
+from sklearn.metrics import average_precision_score, recall_score
 from xgboost.sklearn import XGBClassifier
 from sklearn.metrics import accuracy_score
 
@@ -76,14 +74,16 @@ def select_params_xgboost(platform):
 # split the data to train and test split based on the video id
 def split_by_control_param(df, platform, random_seed):
     # read the NC data
+    Sydney = 1
+    Random = 0
     test_df = df[
-        (df['location'] == assign_control_conditions.Sydney)&
-        (df['bandwidth'] == assign_control_conditions.Random)&
+        (df['location'] == Sydney)
+        (df['bandwidth'] == Random)&
         (df['Vid_pltform_mean'] == platform)]
 
     train_df = df[
-        (df['location'] == assign_control_conditions.Sydney)&
-        (df['bandwidth'] == assign_control_conditions.Random)&
+        (df['location'] == Sydney)&
+        (df['bandwidth'] == Random)&
         (df['Vid_pltform_mean'] == platform)]
 
     train_df_360 = train_df[train_df['Vid_type_mean'] == settings.V_360]
