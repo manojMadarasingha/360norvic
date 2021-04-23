@@ -95,12 +95,12 @@ Please cite the our work if you intend to use our dataset.
 
 Latex bib.
 
-`@inproceedings{360Norivc,\
-  title={360NorVic: 360-Degree Video Classification from Mobile Encrypted Video Traffic (in press)},\
-  author={Kattadige, Chamara and Raman, Aravindh  and Thilakarathna, Kanchana  and Lutu, Andra  and Perino, Diego },\
-  booktitle={Workshop on Network and Operating System Support for Digital Audio and Video (NOSSDAV ’21)},\
-  year={2021}
-}`
+`@inproceedings{360Norivc,`\
+  `title={360NorVic: 360-Degree Video Classification from Mobile Encrypted Video Traffic (in press)},`\
+  `author={Kattadige, Chamara and Raman, Aravindh  and Thilakarathna, Kanchana  and Lutu, Andra  and Perino, Diego },`\
+  `booktitle={Workshop on Network and Operating System Support for Digital Audio and Video (NOSSDAV ’21)},`\
+  `year={2021}`
+`}`
 
 
 
