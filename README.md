@@ -13,6 +13,7 @@ Following packages are required.
 *	Pandas			1.0.3
 *	scipy				1.4.1
 *	sklearn			0.22.1
+*	py-xgboost     0.90
 
 ## Offline classification - DS-pkt (Section 4.3, Section 5.1 (DS-pkt) in the paper)
 Offline evaluation for three traffic types namely YouTube (YT), Facebook (FB) and  BOTH (combining YT and FB) using **packet** level data. 
