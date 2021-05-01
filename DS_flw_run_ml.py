@@ -76,8 +76,9 @@ def split_by_control_param(df, platform, random_seed):
     # read the NC data
     Sydney = 1
     Random = 0
+
     test_df = df[
-        (df['location'] == Sydney)
+        (df['location'] == Sydney)&
         (df['bandwidth'] == Random)&
         (df['Vid_pltform_mean'] == platform)]
 
