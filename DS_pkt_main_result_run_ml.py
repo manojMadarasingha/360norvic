@@ -4,11 +4,11 @@ from sklearn.utils import shuffle
 import settings
 import pandas as pd
 import assign_control_condition
-from sklearn.metrics import  roc_curve, roc_auc_score, \
+from sklearn.metrics import roc_curve, roc_auc_score, \
     average_precision_score, recall_score, accuracy_score
 
-def run_xgboost(df_train, df_test, platform,iter):
 
+def run_xgboost(df_train, df_test, platform, iter):
     target = 'Vid_type'
     predictors = [x for x in df_train.columns if x not in [target]]
 
@@ -37,7 +37,6 @@ def run_xgboost(df_train, df_test, platform,iter):
                                   scale_pos_weight=1.0,
                                   verbosity=0)
 
-
     xgboost_model.fit(x_train, y_train)
     y_pred = xgboost_model.predict(x_test)
 
@@ -61,7 +60,7 @@ def run_xgboost(df_train, df_test, platform,iter):
                              '_tpr': model_tpr,
                              '_auc': model_auc})
 
-    print('Iteration: %.2f === Acc: %.2f  Prec: %.2f  Reca: %.2f ==='  % (iter, accuracy, precsion, recall))
+    print('Iteration: %.2f === Acc: %.2f  Prec: %.2f  Reca: %.2f ===' % (iter, accuracy, precsion, recall))
 
     return accuracy, precsion, recall, roc_data
 
@@ -78,13 +77,16 @@ def split_train_test(df, random_seed):
     train_df = df.loc[df['Vid_num'].isin(list(train_ind))]
     test_df = df.loc[df['Vid_num'].isin(list(test_ind))]
 
+    Sydney = 1
+    Random = 0
+
     train_df = train_df[
-        (train_df['loc'] == assign_control_condition.Sydney) &
-        (train_df['bandwidth'] == assign_control_condition.Random)]
+        (train_df['loc'] == Sydney) &
+        (train_df['bandwidth'] == Random)]
 
     test_df = test_df[
-        (test_df['loc'] == assign_control_condition.Sydney) &
-        (test_df['bandwidth'] == assign_control_condition.Random)]
+        (test_df['loc'] == Sydney) &
+        (test_df['bandwidth'] == Random)]
 
     if test_df.shape[0] == 0:
         test_ind = np.random.choice(train_ind, size=(len(train_ind)) // 4, replace=False)
@@ -104,7 +106,6 @@ def split_train_test(df, random_seed):
 # selec the top 20 features defined by the xgboost model
 # selecting the top 20 features may slightly reduce the performance
 def select_top_20_features(df, platform):
-
     # select the features according to the platform
     if platform == settings.PLATFORM_YT:
         features = YT_W_5s_1s
@@ -120,6 +121,7 @@ def select_top_20_features(df, platform):
     filtered_final_df = pd.DataFrame(data=final_df_val,
                                      columns=features)
     return filtered_final_df
+
 
 # most important features as is seen by the model
 YT_W_5s_1s = ['bytes_ip_dl_75%',
