@@ -3,7 +3,6 @@ from xgboost.sklearn import XGBClassifier
 from sklearn.utils import shuffle
 import settings
 import pandas as pd
-import assign_control_condition
 from sklearn.metrics import roc_curve, roc_auc_score, \
     average_precision_score, recall_score, accuracy_score
 
